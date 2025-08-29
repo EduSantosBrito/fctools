@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use crate::{
     process_spawner::ProcessSpawner,
     runtime::Runtime,
-    vm::models::{LoadSnapshot, MemoryBackend, MemoryBackendType},
+    vm::models::{LoadSnapshot, MemoryBackend, MemoryBackendType, NetworkOverrides},
     vmm::{
         executor::VmmExecutor,
         ownership::VmmOwnershipModel,
@@ -45,6 +45,7 @@ pub struct PrepareVmFromSnapshotOptions<E: VmmExecutor, S: ProcessSpawner, R: Ru
     pub enable_diff_snapshots: Option<bool>,
     /// Optionally, whether to resume the new VM immediately.
     pub resume_vm: Option<bool>,
+    pub network_overrides: Option<Vec<NetworkOverrides>>,
 }
 
 impl VmSnapshot {
@@ -107,6 +108,7 @@ impl VmSnapshot {
             },
             snapshot,
             resume_vm: options.resume_vm,
+            network_overrides: options.network_overrides,
         };
 
         let configuration = VmConfiguration::RestoredFromSnapshot { load_snapshot };

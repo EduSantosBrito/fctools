@@ -234,6 +234,8 @@ pub struct LoadSnapshot {
     pub snapshot: Resource,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resume_vm: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_overrides: Option<Vec<NetworkOverrides>>,
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq, Eq)]
@@ -357,4 +359,11 @@ pub struct RegModifier {
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub(crate) struct ReprApiError {
     pub fault_message: String,
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq, Eq)]
+pub struct NetworkOverrides {
+    pub iface_id: String,
+    pub host_dev_name: String,
+    pub guest_mac: String,
 }

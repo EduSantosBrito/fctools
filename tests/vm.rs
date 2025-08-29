@@ -313,6 +313,7 @@ async fn prepare_snapshot_vm(old_vm: &mut TestVm, snapshot: VmSnapshot, is_jaile
                 },
                 enable_diff_snapshots: Some(false),
                 resume_vm: Some(true),
+                network_overrides: None,
             },
         )
         .await
