@@ -98,6 +98,7 @@ fn vm_logger_test(resource_type: CreatedResourceType) {
             let log_path = vm
                 .get_configuration()
                 .get_data()
+                .unwrap()
                 .logger_system
                 .as_ref()
                 .unwrap()
@@ -137,6 +138,7 @@ fn vm_metrics_test(resource_type: CreatedResourceType) {
             let metrics_path = vm
                 .get_configuration()
                 .get_data()
+                .unwrap()
                 .metrics_system
                 .as_ref()
                 .unwrap()
@@ -160,6 +162,7 @@ fn vm_processes_vsock() {
         let uds_path = vm
             .get_configuration()
             .get_data()
+            .unwrap()
             .vsock_device
             .as_ref()
             .unwrap()

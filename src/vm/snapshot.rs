@@ -26,9 +26,6 @@ pub struct VmSnapshot {
     pub snapshot_path: PathBuf,
     /// The owned [PathBuf] pointing to the effective location of the memory file.
     pub mem_file_path: PathBuf,
-    /// A clone of the original [Vm]'s [VmConfigurationData], necessary to subsequently create
-    /// a new [Vm].
-    pub configuration_data: VmConfigurationData,
 }
 
 /// The data necessary to prepare a [Vm] from a [VmSnapshot].
@@ -112,10 +109,7 @@ impl VmSnapshot {
             resume_vm: options.resume_vm,
         };
 
-        let configuration = VmConfiguration::RestoredFromSnapshot {
-            load_snapshot,
-            data: self.configuration_data,
-        };
+        let configuration = VmConfiguration::RestoredFromSnapshot { load_snapshot };
 
         Vm::prepare(
             options.executor,

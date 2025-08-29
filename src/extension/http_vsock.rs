@@ -160,15 +160,7 @@ impl<E: VmmExecutor, S: ProcessSpawner, R: Runtime> VmVsockHttp for Vm<E, S, R> 
         &self,
         guest_port: u32,
     ) -> Result<VmVsockHttpClient<Self::SocketBackend>, VmVsockHttpError> {
-        let socket_path = self
-            .get_configuration()
-            .get_data()
-            .vsock_device
-            .as_ref()
-            .ok_or(VmVsockHttpError::VsockNotConfigured)?
-            .uds
-            .get_effective_path()
-            .ok_or(VmVsockHttpError::VsockResourceUninitialized)?;
+        let socket_path = self.vmm_process.get_socket_path().unwrap();
         let stream = <R::SocketBackend as hyper_client_sockets::Backend>::connect_to_firecracker_socket(
             &socket_path,
             guest_port,
@@ -194,16 +186,7 @@ impl<E: VmmExecutor, S: ProcessSpawner, R: Runtime> VmVsockHttp for Vm<E, S, R> 
             self.vmm_process.resource_system.runtime.clone(),
         ))
         .build(FirecrackerConnector::<R::SocketBackend>::new());
-        let socket_path = self
-            .get_configuration()
-            .get_data()
-            .vsock_device
-            .as_ref()
-            .ok_or(VmVsockHttpError::VsockNotConfigured)?
-            .uds
-            .get_effective_path()
-            .ok_or(VmVsockHttpError::VsockResourceUninitialized)?
-            .to_owned();
+        let socket_path = self.vmm_process.get_socket_path().unwrap();
 
         Ok(VmVsockHttpClient(VmVsockHttpClientInner::ConnectionPool {
             client,

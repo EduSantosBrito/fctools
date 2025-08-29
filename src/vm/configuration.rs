@@ -23,40 +23,31 @@ pub enum VmConfiguration {
     RestoredFromSnapshot {
         /// The [LoadSnapshot] used for loading the snapshot this VM needs to be restored from.
         load_snapshot: LoadSnapshot,
-        /// The [VmConfigurationData] tied to this VM. It must be the exact same as the one from the original VM,
-        /// which is guaranteed if you use the default snapshot-creating functionality via the API.
-        data: VmConfigurationData,
     },
 }
 
 impl VmConfiguration {
     /// Get a mutable reference to the [VmConfigurationData] inside this configuration.
     #[inline]
-    pub fn get_data_mut(&mut self) -> &mut VmConfigurationData {
+    pub fn get_data_mut(&mut self) -> Option<&mut VmConfigurationData> {
         match self {
             VmConfiguration::New {
                 init_method: _,
                 ref mut data,
-            } => data,
-            VmConfiguration::RestoredFromSnapshot {
-                load_snapshot: _,
-                ref mut data,
-            } => data,
+            } => Some(data),
+            VmConfiguration::RestoredFromSnapshot { load_snapshot: _ } => None,
         }
     }
 
     /// Get a shared reference to the [VmConfigurationData] inside this configuration.
     #[inline]
-    pub fn get_data(&self) -> &VmConfigurationData {
+    pub fn get_data(&self) -> Option<&VmConfigurationData> {
         match self {
             VmConfiguration::New {
                 init_method: _,
                 ref data,
-            } => data,
-            VmConfiguration::RestoredFromSnapshot {
-                load_snapshot: _,
-                ref data,
-            } => data,
+            } => Some(data),
+            VmConfiguration::RestoredFromSnapshot { load_snapshot: _ } => None,
         }
     }
 }

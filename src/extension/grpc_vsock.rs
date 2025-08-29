@@ -93,16 +93,7 @@ fn create_endpoint_and_service<E: VmmExecutor, S: ProcessSpawner, R: Runtime, C:
     guest_port: u32,
     configure_endpoint: C,
 ) -> Result<(Endpoint, FirecrackerTowerService<R::SocketBackend>), VmVsockGrpcError> {
-    let uds_path = vm
-        .get_configuration()
-        .get_data()
-        .vsock_device
-        .as_ref()
-        .ok_or(VmVsockGrpcError::VsockNotConfigured)?
-        .uds
-        .get_effective_path()
-        .ok_or(VmVsockGrpcError::VsockResourceUninitialized)?
-        .to_owned();
+    let uds_path = vm.vmm_process.get_socket_path().unwrap();
 
     let endpoint = configure_endpoint(
         Endpoint::try_from(format!("http://[::1]:{guest_port}"))
