@@ -14,10 +14,7 @@ use crate::{
     },
 };
 
-use super::{
-    configuration::{VmConfiguration, VmConfigurationData},
-    Vm, VmError,
-};
+use super::{configuration::VmConfiguration, Vm, VmError};
 
 /// The data associated with a snapshot created for a [Vm].
 #[derive(Debug, Clone)]

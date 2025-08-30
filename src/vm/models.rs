@@ -365,5 +365,4 @@ pub(crate) struct ReprApiError {
 pub struct NetworkOverrides {
     pub iface_id: String,
     pub host_dev_name: String,
-    pub guest_mac: String,
 }
