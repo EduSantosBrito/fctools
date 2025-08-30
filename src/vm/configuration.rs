@@ -23,6 +23,8 @@ pub enum VmConfiguration {
     RestoredFromSnapshot {
         /// The [LoadSnapshot] used for loading the snapshot this VM needs to be restored from.
         load_snapshot: LoadSnapshot,
+        logger_system: Option<LoggerSystem>,
+        metrics_system: Option<MetricsSystem>,
     },
 }
 
@@ -35,7 +37,11 @@ impl VmConfiguration {
                 init_method: _,
                 ref mut data,
             } => Some(data),
-            VmConfiguration::RestoredFromSnapshot { load_snapshot: _ } => None,
+            VmConfiguration::RestoredFromSnapshot {
+                load_snapshot: _,
+                logger_system: _,
+                metrics_system: _,
+            } => None,
         }
     }
 
@@ -47,7 +53,11 @@ impl VmConfiguration {
                 init_method: _,
                 ref data,
             } => Some(data),
-            VmConfiguration::RestoredFromSnapshot { load_snapshot: _ } => None,
+            VmConfiguration::RestoredFromSnapshot {
+                load_snapshot: _,
+                logger_system: _,
+                metrics_system: _,
+            } => None,
         }
     }
 }

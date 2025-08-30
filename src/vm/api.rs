@@ -9,7 +9,10 @@ use serde::{de::DeserializeOwned, Serialize};
 use crate::{
     process_spawner::ProcessSpawner,
     runtime::Runtime,
-    vm::upgrade_owner,
+    vm::{
+        models::{LoggerSystem, MetricsSystem},
+        upgrade_owner,
+    },
     vmm::{
         executor::VmmExecutor,
         ownership::ChangeOwnerError,
@@ -478,14 +481,16 @@ pub(super) async fn init_new<E: VmmExecutor, S: ProcessSpawner, R: Runtime>(
 pub(super) async fn init_restored_from_snapshot<E: VmmExecutor, S: ProcessSpawner, R: Runtime>(
     vm: &mut Vm<E, S, R>,
     load_snapshot: LoadSnapshot,
+    logger_system: Option<LoggerSystem>,
+    metrics_system: Option<MetricsSystem>,
 ) -> Result<(), VmApiError> {
-    // if let Some(ref logger) = data.logger_system {
-    //     send_api_request(vm, "/logger", "PUT", Some(logger)).await?;
-    // }
+    if let Some(ref logger) = logger_system {
+        send_api_request(vm, "/logger", "PUT", Some(logger)).await?;
+    }
 
-    // if let Some(ref metrics_system) = data.metrics_system {
-    //     send_api_request(vm, "/metrics", "PUT", Some(metrics_system)).await?;
-    // }
+    if let Some(ref metrics_system) = metrics_system {
+        send_api_request(vm, "/metrics", "PUT", Some(metrics_system)).await?;
+    }
 
     send_api_request(vm, "/snapshot/load", "PUT", Some(&load_snapshot)).await
 }

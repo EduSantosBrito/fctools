@@ -257,8 +257,12 @@ impl<E: VmmExecutor, S: ProcessSpawner, R: Runtime> Vm<E, S, R> {
                     api::init_new(self, data).await.map_err(VmError::ApiError)?;
                 }
             }
-            VmConfiguration::RestoredFromSnapshot { load_snapshot } => {
-                api::init_restored_from_snapshot(self, load_snapshot)
+            VmConfiguration::RestoredFromSnapshot {
+                load_snapshot,
+                logger_system,
+                metrics_system,
+            } => {
+                api::init_restored_from_snapshot(self, load_snapshot, logger_system, metrics_system)
                     .await
                     .map_err(VmError::ApiError)?;
             }

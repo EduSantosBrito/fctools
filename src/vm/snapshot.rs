@@ -108,7 +108,11 @@ impl VmSnapshot {
             network_overrides: options.network_overrides,
         };
 
-        let configuration = VmConfiguration::RestoredFromSnapshot { load_snapshot };
+        let configuration = VmConfiguration::RestoredFromSnapshot {
+            load_snapshot,
+            logger_system: None,
+            metrics_system: None,
+        };
 
         Vm::prepare(
             options.executor,
